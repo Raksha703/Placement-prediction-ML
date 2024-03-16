@@ -3,7 +3,6 @@ import joblib
 
 def main():
     # Styling
-    # Styling
     st.markdown(
         """
         <style>
@@ -65,7 +64,7 @@ def main():
 
     # Degree Section
     st.subheader("Undergraduate Degree")
-    degree_percentage = st.slider("*Enter Your CGPA*", 0, 10)
+    degree_percentage = st.slider("*Enter Your Percentage*", 0, 100)
 
     # Field of degree education
     degree_field = st.selectbox("*Field of Degree Education*", ("Science & Technology", "Commerce & Management", "Others"))
@@ -77,16 +76,16 @@ def main():
     work_experience_code = 1 if work_experience == "Yes" else 0
 
     # Test Scores Section
-    st.subheader("Entrance Test Scores (GATE/JEE/NEET)")
-    test_percentage = st.slider("*Enter Your Test Percentile*", 0, 100)
+    st.subheader("Rate Yourself on the basis of Communication skills")
+    test_percentage = st.slider("*Enter*", 0, 100)
 
     # MBA specialization Section
-    st.subheader("Any Specialization")
+    st.subheader("Member of which CLUBS/SOCIETIES")
     mba_specialization = st.selectbox("", ("Technical", "Non-Technical"))
     mba_specialization_code = 1 if mba_specialization == "Technical" else 0
 
     # MBA Percentage Section
-    mba_percentage = st.slider("*Enter Your Specialization CGPA*", 0, 10)
+    mba_percentage = st.slider("*Rate Yourself on the basis of on field experiences*", 0, 100)
 
     if st.button('Predict'):
         prediction = model.predict([[gender_code, tenth_percentage, tenth_board_code, 
@@ -94,7 +93,10 @@ def main():
                                      degree_percentage, degree_field_code, work_experience_code,
                                      test_percentage, mba_specialization_code, mba_percentage]])
         st.balloons()
-        st.success(f'Campus Placement Prediction: {prediction[0]}')
+        if prediction[0] == 1:
+            st.success('High chances of campus placement!')
+        else:
+            st.error('Low chances of campus placement!')
 
 if __name__ == '__main__':
     main()
