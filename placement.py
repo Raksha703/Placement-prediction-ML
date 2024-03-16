@@ -2,97 +2,99 @@ import streamlit as st
 import joblib
 
 def main():
-    html_temp = """
-    <div style="background-color:lightblue;padding:16px">
-        <h2 style="color:black; text-align:center">Campus Placement Prediction</h2>
-    </div>
+    # Styling
+    # Styling
+    st.markdown(
         """
-        
-    st.markdown(html_temp, unsafe_allow_html=True)
-    
+        <style>
+        .header {
+            background-color: lightblue;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally */
+        }
+        .instruction {
+            margin-bottom: 10px;
+        }
+        .label-italic {
+            font-style: italic;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Header
+    st.markdown(
+        """
+        <div class="header">
+            <h2 style="color:black; text-align:center">Campus Placement Prediction</h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     model = joblib.load('model_campus_placement')
-    
-    #gender
-    s1=st.selectbox("Sex",("Male","Female"))
-    if s1=="Male":
-        p1=1
-    else:
-        p1=0
-    
-    #10th
-    p2 = st.slider("Enter Your 10th Percentage",0,100)
-    
-    #10th board
-    s2=st.selectbox("10th Board",("Central","Others"))
-    if s2=="Central":
-        p3=1
-    else:
-        p3=0
-    
-    #12th
-    p4 = st.slider("Enter Your 12th Percentage",0,100)
-    
-    
-    #12th board
-    s3=st.selectbox("12th Board",("Central","Others"))
-    if s3=="Central":
-        p5=1
-    else:
-        p5=0
-    
-    #specialization in higher edu
-    s4=st.selectbox("Specialzation in Higher Secondary Education",("Science","Commerce","Arts"))
-    if s4=="Science":
-        p6=2
-    elif s4 == "Commerce":
-        p6=1    
-    else:
-        p6=0
-    
-    
-    #degree %
-    p7 = st.slider("Enter Your Degree Percentage",0,100)
-    
-    
-    #ug
-    s5=st.selectbox("Under Graduation(Degree type)- Field of degree education",("Sci&Tech","Comm&Mgmt","Others"))
-    if s5=="Sci&Tech":
-        p8=2
-    elif s5=="Comm&Mgmt":
-        p8=1
-    else:
-        p8=0
-    
-    
-    #work experience
-    s6=st.selectbox("Work Experience",("Yes","No"))
-    if s6=="Yes":
-        p9=1
-    else:
-        p9=0
-    
-    
-    #test %
-    p10 = st.slider("Enter Your Test Percentage",0,100)
-    
-    
-    #branch
-    s7=st.selectbox("Work Experience",("Mkt&HR","Mky&Fin"))
-    if s7=="Mkt&HR":
-        p11=1
-    else:
-        p11=0
-    
-    
-    #mba %
-    p12 = st.slider("Enter Your MBA Percentage",0,100)    
-    
-    
+
+    # Gender Section
+    st.subheader("Personal Information")
+    gender = st.selectbox("*Sex*", ("Male", "Female"))
+    gender_code = 1 if gender == "Male" else 0
+
+    # 10th Section
+    st.subheader("10th Standard")
+    tenth_percentage = st.slider("*Enter Your 10th Percentage*", 0, 100)
+
+    # 10th board
+    tenth_board = st.selectbox("*10th Board*", ("Central", "Others"))
+    tenth_board_code = 1 if tenth_board == "Central" else 0
+
+    # 12th Section
+    st.subheader("Higher Secondary Education")
+    twelfth_percentage = st.slider("*Enter Your 12th Percentage*", 0, 100)
+
+    # 12th board
+    twelfth_board = st.selectbox("*12th Board*", ("Central", "Others"))
+    twelfth_board_code = 1 if twelfth_board == "Central" else 0
+
+    specialization = st.selectbox("*Specialization*", ("Science", "Commerce", "Arts"))
+    specialization_code = {"Science": 2, "Commerce": 1, "Arts": 0}[specialization]
+
+    # Degree Section
+    st.subheader("Undergraduate Degree")
+    degree_percentage = st.slider("*Enter Your CGPA*", 0, 10)
+
+    # Field of degree education
+    degree_field = st.selectbox("*Field of Degree Education*", ("Science & Technology", "Commerce & Management", "Others"))
+    degree_field_code = {"Science & Technology": 2, "Commerce & Management": 1, "Others": 0}[degree_field]
+
+    # Work Experience Section
+    st.subheader("Work Experience")
+    work_experience = st.selectbox("*Do You Have Any Work Experience?*", ("Yes", "No"))
+    work_experience_code = 1 if work_experience == "Yes" else 0
+
+    # Test Scores Section
+    st.subheader("Entrance Test Scores (GATE/JEE/NEET)")
+    test_percentage = st.slider("*Enter Your Test Percentile*", 0, 100)
+
+    # MBA specialization Section
+    st.subheader("Any Specialization")
+    mba_specialization = st.selectbox("", ("Technical", "Non-Technical"))
+    mba_specialization_code = 1 if mba_specialization == "Technical" else 0
+
+    # MBA Percentage Section
+    mba_percentage = st.slider("*Enter Your Specialization CGPA*", 0, 10)
+
     if st.button('Predict'):
-        prediction = model.predict([[p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12]])
+        prediction = model.predict([[gender_code, tenth_percentage, tenth_board_code, 
+                                     twelfth_percentage, twelfth_board_code, specialization_code,
+                                     degree_percentage, degree_field_code, work_experience_code,
+                                     test_percentage, mba_specialization_code, mba_percentage]])
         st.balloons()
-        st.success('Campus Placement Prediction '.format(round(prediction[0],2)))
-    
+        st.success(f'Campus Placement Prediction: {prediction[0]}')
 
 if __name__ == '__main__':
     main()
