@@ -30,7 +30,7 @@ def main():
     st.markdown(
         """
         <div class="header">
-            <h2 style="color:black; text-align:center">Campus Placement Prediction</h2>
+            <h2 style="color:white; text-align:center">Campus Placement Prediction</h2>
         </div>
         """,
         unsafe_allow_html=True
