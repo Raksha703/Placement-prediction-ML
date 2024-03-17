@@ -92,8 +92,9 @@ def main():
                                      twelfth_percentage, twelfth_board_code, specialization_code,
                                      degree_percentage, degree_field_code, work_experience_code,
                                      test_percentage, mba_specialization_code, mba_percentage]])
-        st.balloons()
+        
         if prediction[0] == 1:
+            st.balloons()
             st.success('High chances of campus placement!')
         else:
             st.error('Low chances of campus placement!')
