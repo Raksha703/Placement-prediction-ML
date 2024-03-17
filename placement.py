@@ -7,7 +7,7 @@ def main():
         """
         <style>
         .header {
-            background-color: lightblue;
+            background-color: #e61e4d;
             padding: 16px;
             border-radius: 10px;
             margin-bottom: 20px;
